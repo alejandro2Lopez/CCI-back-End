@@ -1,5 +1,5 @@
 
-import { insert_payment, get_statistics, get_history_payments } from "./service.ts";
+import { insert_payment, get_statistics, get_history_payments, delete_payment } from "./service.ts";
 import { isAllowedUser } from "../_shared/auth.ts";
 import { response } from '../_shared/global_services.ts';
 
@@ -13,16 +13,16 @@ Deno.serve(async (req) => {
     const url = new URL(req.url);
     const method = req.method;
 
+    const command = url.pathname.split('/').pop();
+    const id = command && command.trim() !== "" ? command : "";
 
     switch (method) {
       case 'GET':
-        const url = new URL(req.url);
-        const command = url.pathname.split('/').pop();
-        const id = command && command.trim() !== "" ? command : "";
+
 
         if (id !== "") {
           // Si necesitas manejar GET con un ID, puedes hacerlo aquí.
-          return get_history_payments(req);
+          return await get_history_payments(req);
         } else {
           // Si no hay ID, obtener todos los estudiantes.
           return await get_statistics(req);
@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
       case 'PUT':
         return response({ error: 'Method Not Allowed' }, 500);
       case 'DELETE':
-        return response({ error: 'Method Not Allowed' }, 500);
+        return delete_payment(id, req);
       default:
         return response({ error: 'Method Not Allowed' }, 388);
     }

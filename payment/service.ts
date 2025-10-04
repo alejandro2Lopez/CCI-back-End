@@ -87,3 +87,16 @@ export async function get_history_payments(req: Request) {
 
     return response(data, 200);
 }
+
+export async function delete_payment(id, req: Request) {
+
+    const supabase = supabase_connect(req);
+
+    const { data: data_payment, error: error_enrolment } = await supabase.rpc("delete_payment_if_today", { p_payment_id: id });
+    if (error_enrolment) {
+        return response({ error: data_payment.message }, 305);
+    }
+    
+
+    return response("success", 200);
+}

@@ -1,5 +1,5 @@
 
-import { insert_student, get_students, get_student, update_student } from "./service.ts";
+import { insert_student, get_students, get_student, update_student, delete_student } from "./service.ts";
 import { isAllowedUser } from "../_shared/auth.ts";
 import { response } from '../_shared/global_services.ts';
 
@@ -35,9 +35,9 @@ Deno.serve(async (req) => {
        
 
       case 'DELETE':
-        // Similar al PUT, se podría manejar DELETE aquí si el ID existe.
-        // return deleteTask(id);
-        break;
+   
+        return delete_student(id, req);
+        
 
       default:
         return response({ error: 'Method Not Allowed' }, 388);

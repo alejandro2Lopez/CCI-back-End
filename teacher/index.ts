@@ -1,5 +1,5 @@
 
-import { insert_teacher, update_teacher, get_teacher, get_teachers, update_teacher_status } from "./service.ts";
+import { insert_teacher, update_teacher, get_teacher, get_teachers, update_teacher_status, delete_teacher } from "./service.ts";
 import { isAllowedUser } from "../_shared/auth.ts";
 import { response } from '../_shared/global_services.ts';
 
@@ -34,9 +34,11 @@ Deno.serve(async (req) => {
 
 
       case 'DELETE':
-
-        return await update_teacher_status(req);
-
+        if (id !== "") {
+          return await delete_teacher(id, req)
+        } else {
+          return await update_teacher_status(req);
+        }
       default:
         return response({ error: 'Method Not Allowed' }, 308);
 

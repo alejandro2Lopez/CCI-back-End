@@ -39,12 +39,15 @@ export async function update_enrollment(req: Request) {
     delete validate_enrollment.e_enrollment_paymentSN;
     delete validate_enrollment.e_first_course_payment;
     delete validate_enrollment.e_enrolment_payment;
+    delete validate_enrollment.e_teacher;
+    delete validate_enrollment.e_course;
+    delete validate_enrollment.e_student_id;
 
 
 
     const { error: error_enrolment } = await supabase.rpc("update_enrollment", validate_enrollment);
     if (error_enrolment) {
-        return response({ error: error_enrolment }, 305);
+        return response({ error:  error_enrolment  }, 305);
     }
 
     return response({ message: "sucess" }, 200);
@@ -61,4 +64,16 @@ export async function get_enrollment_table(req: Request) {
     }
 
     return response(data, 200);
+}
+export async function delete_enrollment(id, req: Request) {
+
+    const supabase = supabase_connect(req);
+
+    const { data: data_enrolment, error: error_enrolment } = await supabase.rpc("delete_enrollment", { p_enrollment_id: id });
+    if (error_enrolment) {
+        return response({ error: error_enrolment.message }, 305);
+    }
+
+
+    return response("success", 200);
 }

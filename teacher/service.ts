@@ -71,3 +71,15 @@ export async function update_teacher_status(req: Request) {
     return response({ message: "update success" }, 200);
 
 }
+export async function delete_teacher(id, req: Request) {
+
+    const supabase = supabase_connect(req);
+
+    const { data: data_enrolment, error: error_enrolment } = await supabase.rpc("delete_teacher_if_no_enrollements", {  p_person_id: id });
+    if (error_enrolment) {
+        return response({ error: error_enrolment.message }, 305);
+    }
+    
+
+    return response("success", 200);
+}

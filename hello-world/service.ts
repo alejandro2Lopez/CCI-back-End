@@ -169,4 +169,17 @@ export async function update_student(req: Request) {
         return response({ message: "upload success" }, 200);
 
     }
+    
+}
+export async function delete_student(id, req: Request) {
+
+    const supabase = supabase_connect(req);
+
+    const { data: data_enrolment, error: error_enrolment } = await supabase.rpc("delete_student_if_no_payments", {  p_person_id: id });
+    if (error_enrolment) {
+        return response({ error: error_enrolment.message }, 305);
+    }
+    
+
+    return response(data_enrolment, 200);
 }
